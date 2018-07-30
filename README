@@ -1,0 +1,43 @@
+###########################################################
+This is a repository containing scripts to
+* query the Config Database
+* insert new records into the database
+* insert partial records into the db
+###########################################################
+
+Requirements:
+-- An installation of the PostgreSQL CDB API either through MAUS or stand-alone
+---- https://bazaar.launchpad.net/~janusz-martyniak/mcdb/mice.cdb.client.api-python/files/head:/dist/
+
+The structure is broken down by DB services implemented in the API:
+
+1. beamline
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+2. coolingchannel
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+3. absorber
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+4. tracker
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+5. calib
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+6. batch iteration
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+7. mc-serial
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+8. runinfo
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+9. utils
+--> to query the beamline table by run or optics tags
+--> to insert begin, beamline, end records into the beamline table
+
+
+

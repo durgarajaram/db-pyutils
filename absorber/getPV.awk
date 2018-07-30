@@ -1,0 +1,1 @@
+ArchiveExport -start '09/14/2017 00:00:00' -end '09/14/2017 14:00:00' -precision 6 Data/ArchiveData/MasterIndex MICE-AFC-LH2-TS-06:RT | awk '{x = $3; rtot += x*x; N++} END {print NR; print rtot; print sqrt(rtot)/NR}'

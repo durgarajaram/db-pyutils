@@ -1,0 +1,93 @@
+from cdb import Beamline
+import collections
+import ROOT
+from datetime import datetime, timedelta
+
+bl = Beamline("http://cdb.mice.rl.ac.uk")
+
+#da = ROOT.TDatime(2016,09,21,12,00,00);
+#da = ROOT.TDatime(2016,09,21,08,00,00);
+#da = ROOT.TDatime('2016','09','30','13',10,00)
+#ROOT.gStyle.SetTimeOffset(da.Convert());
+#ROOT.gStyle.SetOptStat(0)
+
+#h1 = ROOT.TH1F("h1", "Data Summary", 55, 0, 55);
+#h1.GetYaxis().SetTitle("# Integrated Triggers")
+#h1.GetYaxis().SetTitleOffset(1.4)
+#h1.GetYaxis().SetLabelSize(0.03)
+
+#h1.GetXaxis().SetNdivisions(-501)
+
+run_min = 7497
+run_max = 9279
+
+trigdict = {}
+
+old_run_date = 0
+oldrunts = None
+run = run_min
+while run < run_max:
+    try:
+        blrun = bl.get_beamline_for_run(run)
+        blscalers = blrun[run]['scalars']
+        runts = blrun[run]['start_time']
+        run_date = runts.day
+#       print runts
+#       date_diff = runts - oldrunts
+#       print '++ ',runts, run_date, date_diff
+        if run_date == old_run_date:
+            print '...........same'
+        else:
+            print '!!! change >>> ',run_date-old_run_date
+            ndays=run_date-old_run_date
+            for d in range(ndays):
+                print old_run_date, old_run_date + d
+            #print '!!! change >>> ',run_date,old_run_date,'>>>>>>>>>>>>>>> ',date_diff
+        old_run_date = run_date
+        oldrunts = runts
+#       rundate = runts.strftime("%Y-%m-%d")
+        rundate = runts.strftime("%Y/%m/%d")
+        for k,v in blscalers.iteritems():
+            skey = k.translate(None, ' ')
+#           print skey, v
+            if "Particle" in k:
+                if rundate in trigdict:
+#                   print '>>>> key exists -- appending',rundate,v
+                    trigdict[rundate] += v
+                else:
+#                   print '<<<<<< new key -- ',rundate,v
+#                   print '<<NO'
+                    trigdict[rundate] = v
+    except:
+        pass
+    run = run + 1
+#print trigdict
+
+#newdict = {'07/18': 161202, '07/19': 1001877, '11/19': 313659, '11/18': 175652, '07/10': 1222812, '11/15': 1869, '10/22': 433930, '07/14': 488795, '07/15': 319698, '07/16': 822035, '07/17': 860586, '10/03': 177867, '10/24': 356, '10/01': 181804, '10/02': 0, '10/26': 3370084, '10/07': 311765, '10/06': 229320, '10/05': 36896, '10/04': 88706, '11/28': 595517, '09/26': 147812, '09/27': 0, '09/28': 0, '09/29': 0, '09/25': 64122, '09/24': 285952, '09/23': 221782, '10/09': 313951, '10/10': 0, '10/11': 0, '10/12': 0, '10/13': 0, '10/14': 0, '10/15': 0, '10/16': 0, '09/21': 47782, '09/22': 0, '08/08': 1, '10/08': 287485, '07/27': 1961642, '11/21': 787828, '11/29': 1448708, '10/28': 1153459, '11/26': 612345, '11/27': 331991, '07/21': 1268288, '07/20': 794580, '07/23': 734906, '07/22': 82754, '07/25': 687306, '07/24': 2285193, '07/09': 589529, '07/26': 366208, '07/29': 0, '07/28': 3534724, '11/25': 1019582, '11/22': 1002690, '11/23': 1004186, '11/24': 0, '11/20': 206659, '11/16': 26551, '11/17': 0, '10/18': 33780, '10/19': 154403, '09/30': 187425, '10/17': 0, '10/25': 1940611, '10/27': 3232982, '10/20': 408683, '10/21': 0, '10/23': 0}
+#newdict = {'11/19': 313659, '11/18': 175652, '11/15': 1869, '10/22': 433930, '10/03': 177867, '10/24': 356, '10/01': 181804, '10/02': 0, '10/26': 3370084, '10/07': 311765, '10/06': 229320, '10/05': 36896, '10/04': 88706, '11/28': 595517, '09/26': 147812, '09/27': 0, '09/28': 0, '09/29': 0, '09/25': 64122, '09/24': 285952, '09/23': 221782, '10/09': 313951, '10/10': 0, '10/11': 0, '10/12': 0, '10/13': 0, '10/14': 0, '10/15': 0, '10/16': 0, '09/21': 47782, '09/22': 0, '10/08': 287485, '11/21': 787828, '11/29': 1448708, '10/28': 1153459, '11/26': 612345, '11/27': 331991, '11/25': 1019582, '11/22': 1002690, '11/23': 1004186, '11/24': 0, '11/20': 206659, '11/16': 26551, '11/17': 0, '10/18': 33780, '10/19': 154403, '09/30': 187425, '10/17': 0, '10/25': 1940611, '10/27': 3232982, '10/20': 408683, '10/21': 0, '10/23': 0}
+#print sorted(trigdict)
+#i = 1
+#h1.GetXaxis().SetNdivisions(-202)
+print len(trigdict)
+for key in sorted(trigdict.iterkeys()):
+    print key,trigdict[key]
+#   h1.SetBinContent(i, trigdict[key])
+#   if i == 1 or i%5 == 0 or i == len(trigdict):
+#       print '>>>>> ',key
+#       h1.GetXaxis().SetBinLabel(i, key)
+#   i += 1
+#c = ROOT.TCanvas("c","c",800,800)
+#h1.GetXaxis().SetLabelSize(0.04)
+#h1.GetXaxis().SetTimeDisplay(1)
+#h1.GetXaxis().SetTimeFormat("%m\/%d")
+#h1.GetXaxis().SetTimeFormat("%m\/%d%F2016-09-21 13:00:01");
+#h1.GetXaxis().SetTimeFormat("%m\/%d")
+#h1.SetMarkerStyle(2)
+#h1.SetMarkerSize(2)
+#h1.SetMarkerColor(4)
+#h1.Draw("p")
+#c.SetGridx()
+#c.SetGridy()
+#c.Print("data-summary.png")
+#od = collections.OrderedDict(sorted(trigdict.items()))
+#print od

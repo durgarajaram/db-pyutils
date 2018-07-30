@@ -1,0 +1,8 @@
+To run the scripts in this directory:
+
+1. Setup MAUS
+	source setup-maus.sh
+
+2. python <script>
+
+

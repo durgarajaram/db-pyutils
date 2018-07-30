@@ -1,0 +1,25 @@
+import sys
+from cdb import CoolingChannel
+from cdb import Beamline
+from cdb import Cabling
+_R_SERVER = "http://172.16.246.25:8080"
+
+_CC = CoolingChannel(_R_SERVER)
+_BL = Beamline(_R_SERVER)
+_CBL = Cabling(_R_SERVER)
+print _CBL
+print _CBL.get_server_info()
+print
+print _CC.get_status()
+print _CC.get_server_host_name()
+cctags = _CC.list_tags()
+
+
+for tag in cctags:
+  print '++ TAG: ', tag
+  print _CC.get_coolingchannel_for_tag(tag)
+  print
+
+#print _CC.get_coolingchannel_for_run(sys.argv[1])
+#print _BL.get_beamline_for_run(sys.argv[1])
+#print _CC.get_coolingchannel_for_run(sys.argv[1])

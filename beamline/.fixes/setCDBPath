@@ -1,0 +1,1 @@
+export PYTHONPATH=~/MAUS/CDB/mice.cdb.client.api-python/src/:$PYTHONPATH
